@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-whitemarsh-dev-95525-authRole",
+      "UnauthRoleArn": "arn:aws:iam::741162457976:role/amplify-whitemarsh-dev-95525-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::741162457976:role/amplify-whitemarsh-dev-95525-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-whitemarsh-dev-95525-deployment",
+      "UnauthRoleName": "amplify-whitemarsh-dev-95525-unauthRole",
+      "StackName": "amplify-whitemarsh-dev-95525",
+      "StackId": "arn:aws:cloudformation:us-east-1:741162457976:stack/amplify-whitemarsh-dev-95525/a76a4a60-af78-11ec-b5e5-0adec8a6997d",
+      "AmplifyAppId": "d29qpgzdlvp84t"
+    },
+    "categories": {
+      "auth": {
+        "whitemarsh9f39fa4d": {}
+      }
+    }
+  }
+}

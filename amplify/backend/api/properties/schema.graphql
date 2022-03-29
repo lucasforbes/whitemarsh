@@ -1,0 +1,16 @@
+type Property @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  name: String!
+  address: String!
+  createdAt: String!
+  units: [Unit] @connection(name: "PropertyUnits")
+}
+
+type Unit @model @auth(rules: [{ allow: owner }]) {
+  id: ID!
+  Property: Property @connection(name: "PropertyUnits")
+  bucket: String!
+  name: String!
+  unitIdentifier: String!
+  createdAt: String!
+}

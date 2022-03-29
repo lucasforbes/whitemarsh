@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "properties",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "C:\\Users\\Lucas Forbes\\Documents\\GitHub\\whitemarsh\\amplify\\backend\\api\\properties\\schema.graphql",
+    "defaultAuthType": {
+      "mode": "AMAZON_COGNITO_USER_POOLS",
+      "cognitoUserPoolId": "authwhitemarsh9f39fa4d"
+    }
+  }
+}
