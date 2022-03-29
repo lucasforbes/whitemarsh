@@ -1,7 +1,8 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateProperty = `subscription OnCreateProperty($owner: String!) {
+export const onCreateProperty = /* GraphQL */ `
+  subscription OnCreateProperty($owner: String!) {
     onCreateProperty(owner: $owner) {
       id
       name
@@ -14,16 +15,18 @@ export const onCreateProperty = `subscription OnCreateProperty($owner: String!) 
           name
           unitIdentifier
           createdAt
-          labels
+          updatedAt
           owner
         }
         nextToken
       }
+      updatedAt
       owner
     }
   }
-  `;
-  export const onUpdateProperty = `subscription OnUpdateProperty($owner: String!) {
+`;
+export const onUpdateProperty = /* GraphQL */ `
+  subscription OnUpdateProperty($owner: String!) {
     onUpdateProperty(owner: $owner) {
       id
       name
@@ -36,16 +39,18 @@ export const onCreateProperty = `subscription OnCreateProperty($owner: String!) 
           name
           unitIdentifier
           createdAt
-          labels
+          updatedAt
           owner
         }
         nextToken
       }
+      updatedAt
       owner
     }
   }
-  `;
-  export const onDeleteProperty = `subscription OnDeleteProperty($owner: String!) {
+`;
+export const onDeleteProperty = /* GraphQL */ `
+  subscription OnDeleteProperty($owner: String!) {
     onDeleteProperty(owner: $owner) {
       id
       name
@@ -58,19 +63,21 @@ export const onCreateProperty = `subscription OnCreateProperty($owner: String!) 
           name
           unitIdentifier
           createdAt
-          labels
+          updatedAt
           owner
         }
         nextToken
       }
+      updatedAt
       owner
     }
   }
-  `;
-  export const onCreateUnit = `subscription OnCreateUnit($owner: String!) {
+`;
+export const onCreateUnit = /* GraphQL */ `
+  subscription OnCreateUnit($owner: String!) {
     onCreateUnit(owner: $owner) {
       id
-      property {
+      Property {
         id
         name
         address
@@ -78,21 +85,23 @@ export const onCreateProperty = `subscription OnCreateProperty($owner: String!) 
         units {
           nextToken
         }
+        updatedAt
         owner
       }
       bucket
       name
       unitIdentifier
       createdAt
-      labels
+      updatedAt
       owner
     }
   }
-  `;
-  export const onUpdateUnit = `subscription OnUpdateUnit($owner: String!) {
+`;
+export const onUpdateUnit = /* GraphQL */ `
+  subscription OnUpdateUnit($owner: String!) {
     onUpdateUnit(owner: $owner) {
       id
-      property {
+      Property {
         id
         name
         address
@@ -100,21 +109,23 @@ export const onCreateProperty = `subscription OnCreateProperty($owner: String!) 
         units {
           nextToken
         }
+        updatedAt
         owner
       }
       bucket
       name
       unitIdentifier
       createdAt
-      labels
+      updatedAt
       owner
     }
   }
-  `;
-  export const onDeleteUnit = `subscription OnDeleteUnit($owner: String!) {
+`;
+export const onDeleteUnit = /* GraphQL */ `
+  subscription OnDeleteUnit($owner: String!) {
     onDeleteUnit(owner: $owner) {
       id
-      property {
+      Property {
         id
         name
         address
@@ -122,14 +133,15 @@ export const onCreateProperty = `subscription OnCreateProperty($owner: String!) 
         units {
           nextToken
         }
+        updatedAt
         owner
       }
       bucket
       name
       unitIdentifier
       createdAt
-      labels
+      updatedAt
       owner
     }
   }
-  `;
+`;

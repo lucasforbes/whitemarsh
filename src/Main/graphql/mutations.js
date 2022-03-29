@@ -1,7 +1,8 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createProperty = `mutation CreateProperty(
+export const createProperty = /* GraphQL */ `
+  mutation CreateProperty(
     $input: CreatePropertyInput!
     $condition: ModelPropertyConditionInput
   ) {
@@ -15,17 +16,20 @@ export const createProperty = `mutation CreateProperty(
           id
           bucket
           name
+          unitIdentifier
           createdAt
-          labels
+          updatedAt
           owner
         }
         nextToken
       }
+      updatedAt
       owner
     }
   }
-  `;
-  export const updateProperty = `mutation UpdateProperty(
+`;
+export const updateProperty = /* GraphQL */ `
+  mutation UpdateProperty(
     $input: UpdatePropertyInput!
     $condition: ModelPropertyConditionInput
   ) {
@@ -39,17 +43,20 @@ export const createProperty = `mutation CreateProperty(
           id
           bucket
           name
+          unitIdentifier
           createdAt
-          labels
+          updatedAt
           owner
         }
         nextToken
       }
+      updatedAt
       owner
     }
   }
-  `;
-  export const deleteProperty = `mutation DeleteProperty(
+`;
+export const deleteProperty = /* GraphQL */ `
+  mutation DeleteProperty(
     $input: DeletePropertyInput!
     $condition: ModelPropertyConditionInput
   ) {
@@ -63,47 +70,53 @@ export const createProperty = `mutation CreateProperty(
           id
           bucket
           name
+          unitIdentifier
           createdAt
-          labels
+          updatedAt
           owner
         }
         nextToken
       }
+      updatedAt
       owner
     }
   }
-  `;
-  export const createUnit = `mutation CreateUnit(
+`;
+export const createUnit = /* GraphQL */ `
+  mutation CreateUnit(
     $input: CreateUnitInput!
     $condition: ModelUnitConditionInput
   ) {
     createUnit(input: $input, condition: $condition) {
       id
-      property {
+      Property {
         id
         name
+        address
         createdAt
         units {
           nextToken
         }
+        updatedAt
         owner
       }
       bucket
       name
       unitIdentifier
       createdAt
-      labels
+      updatedAt
       owner
     }
   }
-  `;
-  export const updateUnit = `mutation UpdateUnit(
+`;
+export const updateUnit = /* GraphQL */ `
+  mutation UpdateUnit(
     $input: UpdateUnitInput!
     $condition: ModelUnitConditionInput
   ) {
     updateUnit(input: $input, condition: $condition) {
       id
-      property {
+      Property {
         id
         name
         address
@@ -111,24 +124,26 @@ export const createProperty = `mutation CreateProperty(
         units {
           nextToken
         }
+        updatedAt
         owner
       }
       bucket
       name
       unitIdentifier
       createdAt
-      labels
+      updatedAt
       owner
     }
   }
-  `;
-  export const deleteUnit = `mutation DeleteUnit(
+`;
+export const deleteUnit = /* GraphQL */ `
+  mutation DeleteUnit(
     $input: DeleteUnitInput!
     $condition: ModelUnitConditionInput
   ) {
     deleteUnit(input: $input, condition: $condition) {
       id
-      property {
+      Property {
         id
         name
         address
@@ -136,14 +151,15 @@ export const createProperty = `mutation CreateProperty(
         units {
           nextToken
         }
+        updatedAt
         owner
       }
       bucket
       name
       unitIdentifier
       createdAt
-      labels
+      updatedAt
       owner
     }
   }
-  `;
+`;

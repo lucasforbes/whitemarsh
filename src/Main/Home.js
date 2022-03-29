@@ -4,7 +4,7 @@ import { Grid, Header, Input, List, Segment } from "semantic-ui-react";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import sortBy from "lodash/sortBy";
 import { onCreateProperty } from "./graphql/subscriptions";
-import { listProperties, getProperty } from "./graphql/queries";
+import { listPropertys, getProperty } from "./graphql/queries";
 import { createProperty } from "./graphql/mutations";
 import API, { graphqlOperation } from "@aws-amplify/api";
 import Amplify, { Auth, Storage } from "aws-amplify";
@@ -20,6 +20,7 @@ const NewProperty = () => {
       graphqlOperation(createProperty, {
         input: {
           name: propertyName,
+          address: "",
           createdAt: `${Date.now()}`
         }
       })
@@ -94,8 +95,8 @@ const PropertyDetailsLoader = ({ id }) => {
     React.useEffect(() => {
       setIsLoading(true);
       // Get initial properties list
-      API.graphql(graphqlOperation(listProperties)).then(albs => {
-        setProperties(albs.data.listProperties.items);
+      API.graphql(graphqlOperation(listPropertys)).then(albs => {
+        setProperties(albs.data.listPropertys.items);
         setIsLoading(false);
       });
   
@@ -113,12 +114,15 @@ const PropertyDetailsLoader = ({ id }) => {
     return <PropertiesList properties={properties} />;
   };
 
+
+  const UserContext = React.createContext({ username: null });
+
   export function Home() {
     const { signOut, user } = useAuthenticator();
     // return (
 
     return (
-      <main>
+      <UserContext.Provider value={user}>
         <h1>Hello {user.username}</h1>
         <button onClick={signOut}>Sign out</button>
 
@@ -145,7 +149,7 @@ const PropertyDetailsLoader = ({ id }) => {
             </Grid.Column>
           </Grid>
         </Router>
-      </main>
+        </UserContext.Provider>
     );
     // );
 }

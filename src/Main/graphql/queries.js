@@ -1,7 +1,8 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getProperty = `query GetProperty($id: ID!) {
+export const getProperty = /* GraphQL */ `
+  query GetProperty($id: ID!) {
     getProperty(id: $id) {
       id
       name
@@ -14,21 +15,23 @@ export const getProperty = `query GetProperty($id: ID!) {
           name
           unitIdentifier
           createdAt
-          labels
+          updatedAt
           owner
         }
         nextToken
       }
+      updatedAt
       owner
     }
   }
-  `;
-  export const listProperties = `query ListProperties(
+`;
+export const listPropertys = /* GraphQL */ `
+  query ListPropertys(
     $filter: ModelPropertyFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listProperties(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listPropertys(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         name
@@ -37,16 +40,18 @@ export const getProperty = `query GetProperty($id: ID!) {
         units {
           nextToken
         }
+        updatedAt
         owner
       }
       nextToken
     }
   }
-  `;
-  export const getUnit = `query GetUnit($id: ID!) {
+`;
+export const getUnit = /* GraphQL */ `
+  query GetUnit($id: ID!) {
     getUnit(id: $id) {
       id
-      property {
+      Property {
         id
         name
         address
@@ -54,18 +59,20 @@ export const getProperty = `query GetProperty($id: ID!) {
         units {
           nextToken
         }
+        updatedAt
         owner
       }
       bucket
       name
       unitIdentifier
       createdAt
-      labels
+      updatedAt
       owner
     }
   }
-  `;
-  export const listUnits = `query ListUnits(
+`;
+export const listUnits = /* GraphQL */ `
+  query ListUnits(
     $filter: ModelUnitFilterInput
     $limit: Int
     $nextToken: String
@@ -73,25 +80,22 @@ export const getProperty = `query GetProperty($id: ID!) {
     listUnits(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        property {
+        Property {
           id
           name
           address
           createdAt
+          updatedAt
           owner
         }
         bucket
         name
         unitIdentifier
         createdAt
-        labels
+        updatedAt
         owner
       }
       nextToken
     }
   }
-  `;
-  export const convertImageToText = `query ConvertImageToText($input: ConvertImageToTextInput!) {
-    convertImageToText(input: $input)
-  }
-  `;
+`;
