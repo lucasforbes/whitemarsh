@@ -3,56 +3,80 @@ import { useAuthenticator } from "@aws-amplify/ui-react";
 import { Grid, Header, Input, List, Segment } from "semantic-ui-react";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import sortBy from "lodash/sortBy";
+import { onCreateProperty } from "./graphql/subscriptions";
+import { listProperties, getProperty } from "./graphql/queries";
+import { createProperty } from "./graphql/mutations";
+import API, { graphqlOperation } from "@aws-amplify/api";
+import Amplify, { Auth, Storage } from "aws-amplify";
+import awsconfig from "./aws-exports";
 
+Amplify.configure(awsconfig);
 
 const NewProperty = () => {
-    const [propertyName, setPropertyName] = React.useState("");
-    const handleSubmit = () => {
-      console.log(`Creating property ${propertyName} `);
-      setPropertyName("");
-    };
-    const handleChange = event => {
-      setPropertyName(event.target.value);
-    };
-    return (
-      <Segment>
-        <Header as="h3">Add a new property</Header>
-        <Input
-          type="text"
-          placeholder="New Property Name"
-          icon="plus"
-          iconPosition="left"
-          action={{ content: "Create", onClick: handleSubmit }}
-          name="propertyName"
-          value={propertyName}
-          onChange={handleChange}
-        />
-      </Segment>
+  const [propertyName, setPropertyName] = React.useState("");
+  const handleSubmit = async () => {
+    console.log(`Creating property ${propertyName} `);
+    await API.graphql(
+      graphqlOperation(createProperty, {
+        input: {
+          name: propertyName,
+          createdAt: `${Date.now()}`
+        }
+      })
     );
+    setPropertyName("");
   };
-  
-  const PropertyList = ({ properties = [] }) => {
-    return (
-      <Segment>
-        <Header as="h3">My Propeties</Header>
-        <List divided relaxed>
-          {sortBy(properties, ["createdAt"]).map(property => (
-            <List.Item key={property.id}>
-              <NavLink to={`/properties/${property.id}`}>{property.name}</NavLink>
-            </List.Item>
-          ))}
-        </List>
-      </Segment>
-    );
+  const handleChange = event => {
+    setPropertyName(event.target.value);
   };
-  const PropertyDetailsLoader = ({ id }) => {
-    const [isLoading] = React.useState(true);
-    const [property] = React.useState({});
-    if (isLoading) {
-      return <div>Loading...</div>;
-    }
-    return <PropertyDetails property={property} />;
-  };
+  return (
+    <Segment>
+      <Header as="h3">Add a new property</Header>
+      <Input
+        type="text"
+        placeholder="New Property Name"
+        icon="plus"
+        iconPosition="left"
+        action={{ content: "Create", onClick: handleSubmit }}
+        name="propertyName"
+        value={propertyName}
+        onChange={handleChange}
+      />
+    </Segment>
+  );
+};
+const PropertiesList = ({ properties = [] }) => {
+  return (
+    <Segment>
+      <Header as="h3">My Property</Header>
+      <List divided relaxed>
+        {sortBy(properties, ["createdAt"]).map(property => (
+          <List.Item key={property.id}>
+            <NavLink to={`/properties/${property.id}`}>{property.name}</NavLink>
+          </List.Item>
+        ))}
+      </List>
+    </Segment>
+  );
+};
+
+const PropertyDetailsLoader = ({ id }) => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [property, setProperty] = React.useState({});
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    API.graphql(graphqlOperation(getProperty, { id })).then(propertyDetails => {
+      setIsLoading(false);
+      setProperty(propertyDetails.data.getProperty);
+    });
+  }, [id]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  return <PropertyDetails property={property} />;
+};
   
   const PropertyDetails = ({ property }) => {
     return (
@@ -64,11 +88,29 @@ const NewProperty = () => {
     );
   };
   
-  const PropertyListLoader = () => {
-    const [isLoading] = React.useState(true);
-    const [properties] = React.useState([]);
+  const PropertiesListLoader = () => {
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [properties, setProperties] = React.useState([]);
+    React.useEffect(() => {
+      setIsLoading(true);
+      // Get initial properties list
+      API.graphql(graphqlOperation(listProperties)).then(albs => {
+        setProperties(albs.data.listProperties.items);
+        setIsLoading(false);
+      });
+  
+      Auth.currentAuthenticatedUser().then(user => {
+        // Listen to new properties being added
+        API.graphql(
+          graphqlOperation(onCreateProperty, { owner: user.username })
+        ).subscribe(newProperty => {
+          const propertyRecord = newProperty.value.data.onCreateProperty;
+          setProperties(albs => [...albs, propertyRecord]);
+        });
+      });
+    }, []);
     if (isLoading) return null;
-    return <PropertyList properties={properties} />;
+    return <PropertiesList properties={properties} />;
   };
 
   export function Home() {
@@ -84,7 +126,7 @@ const NewProperty = () => {
           <Grid padded>
             <Grid.Column>
               <Route path="/" exact component={NewProperty} />
-              <Route path="/" exact component={PropertyListLoader} />
+              <Route path="/" exact component={PropertiesListLoader} />
     
               <Route
                 path="/properties/:propertyId"
