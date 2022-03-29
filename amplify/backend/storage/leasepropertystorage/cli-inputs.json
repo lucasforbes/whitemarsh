@@ -1,0 +1,16 @@
+{
+  "resourceName": "leasepropertystorage",
+  "policyUUID": "933d8170",
+  "bucketName": "whitemarsh7444b04ee24f43eeba022d8d6394a713",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "triggerFunction": "NONE",
+  "groupAccess": {}
+}
