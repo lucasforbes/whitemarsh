@@ -1,6 +1,7 @@
 import React from "react";
 import { useAuthenticator } from "@aws-amplify/ui-react";
-import { Grid, Header, Input, List, Segment } from "semantic-ui-react";
+import { v4 as uuid } from "uuid";
+import { Grid, Header, Input, List, Segment, Form } from "semantic-ui-react";
 import { BrowserRouter as Router, Route, NavLink } from "react-router-dom";
 import sortBy from "lodash/sortBy";
 import { onCreateProperty } from "./graphql/subscriptions";
@@ -49,7 +50,7 @@ const NewProperty = () => {
 const PropertiesList = ({ properties = [] }) => {
   return (
     <Segment>
-      <Header as="h3">My Property</Header>
+      <Header as="h3">My Properties</Header>
       <List divided relaxed>
         {sortBy(properties, ["createdAt"]).map(property => (
           <List.Item key={property.id}>
@@ -78,16 +79,15 @@ const PropertyDetailsLoader = ({ id }) => {
   }
   return <PropertyDetails property={property} />;
 };
-  
-  const PropertyDetails = ({ property }) => {
-    return (
-      <Segment>
-        <Header as="h3">{property.name}</Header>
-        <p>TODO: Allow lease uploads</p>
-        <p>TODO: Show leases for this property</p>
-      </Segment>
-    );
-  };
+const PropertyDetails = ({ property }) => {
+  return (
+    <Segment>
+      <Header as="h3">{property.name}</Header>
+      <S3LeaseUpload property={property} />
+      <p>TODO: Show leases for this property</p>
+    </Segment>
+  );
+};
   
   const PropertiesListLoader = () => {
     const [isLoading, setIsLoading] = React.useState(true);
@@ -113,6 +113,66 @@ const PropertyDetailsLoader = ({ id }) => {
     if (isLoading) return null;
     return <PropertiesList properties={properties} />;
   };
+
+  const uploadFile = async (event, propertyId) => {
+    const {
+      target: { value, files }
+    } = event;
+    const user = await Auth.currentAuthenticatedUser();
+    const fileForUpload = files[0];
+    const file = fileForUpload || value;
+    const extension = file.name.split(".")[1];
+    const { type: mimeType } = file;
+    const key = `leases/${uuid()}${propertyId}.${extension}`;
+    console.log(user, fileForUpload, file, extension, mimeType, key)
+    try {
+      await Storage.put(key, file, {
+        contentType: mimeType,
+        metadata: {
+          owner: user.username,
+          propertyId
+        }
+      });
+      console.log("successfully uploaded lease!");
+    } catch (err) {
+      console.log("error: ", err);
+    }
+  };
+  
+  const S3LeaseUpload = ({ propertyId }) => {
+    const [isUploading, setIsUploading] = React.useState(false);
+    const onChange = async event => {
+      setIsUploading(true);
+  
+      let files = [];
+      for (var i = 0; i < event.target.files.length; i++) {
+        files.push(event.target.files.item(i));
+      }
+      await Promise.all(files.map(f => uploadFile(event, propertyId)));
+  
+      setIsUploading(false);
+    };
+    return (
+      <div>
+        <Form.Button
+          onClick={() => document.getElementById("add-lease-file-input").click()}
+          disabled={isUploading}
+          icon="file outline"
+          content={isUploading ? "Uploading..." : "Add Leases"}
+        />
+        <input
+          id="add-lease-file-input"
+          type="file"
+          accept="lease/*"
+          multiple
+          onChange={onChange}
+          style={{ display: "none" }}
+        />
+      </div>
+    );
+  };
+  
+
 
 
   const UserContext = React.createContext({ username: null });
